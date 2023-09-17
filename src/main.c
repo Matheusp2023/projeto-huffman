@@ -32,13 +32,13 @@ void insertionFrequency(struct Node** list, int frequency[])
             newNode->frequency = frequency[i];
             newNode->next = NULL;
 
-            // se a lista estiver vazia ou o elemento for o de menor frequência aqui ocorre a inserção
+            // Se a lista estiver vazia ou o elemento for o de menor frequência aqui ocorre a inserção
             if (*list == NULL || frequency[i] < (*list)->frequency)
             {
                 newNode->next = *list;
                 *list = newNode;
             }
-            // aqui é para caso a inserção não ocorra no inicio
+            // Aqui é para caso a inserção não ocorra no inicio
             else
             {
                 struct Node* current = *list;
