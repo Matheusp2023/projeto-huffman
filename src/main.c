@@ -4,12 +4,21 @@
 #define MAX 100
 
 struct Node {
-    unsigned char byte;
+    void *byte;
     int frequency;
     struct Node* next;
 };
 
-/* OBJETIVO: Inserir na lista encadeada list a frequencia e o byte
+void *createVoidPointer(unsigned char byte){
+    unsigned char *pointer = malloc(sizeof(unsigned char*));
+    *pointer = byte;
+    return (void*) pointer;
+}
+unsigned char getByteFromVoidPointer(struct Node *byte){
+    unsigned char *item = (unsigned char*) byte;
+    return *item;
+}
+/* OBJETIVO: Inserir na lista encadeada lista a frequencia e o byte
              de forma ordenada na ordem crescente.*/
 void insertionFrequency(struct Node** list, int frequency[])
 {
@@ -19,16 +28,17 @@ void insertionFrequency(struct Node** list, int frequency[])
         {
             // Criar no
             struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-            newNode->byte = (unsigned char)i;
+            newNode->byte = createVoidPointer(i);
             newNode->frequency = frequency[i];
             newNode->next = NULL;
 
-            // Inserir de forma ordenada
+            // Se a lista estiver vazia ou o elemento for o de menor frequência aqui ocorre a inserção
             if (*list == NULL || frequency[i] < (*list)->frequency)
             {
                 newNode->next = *list;
                 *list = newNode;
             }
+            // Aqui é para caso a inserção não ocorra no inicio
             else
             {
                 struct Node* current = *list;
@@ -46,7 +56,7 @@ void insertionFrequency(struct Node** list, int frequency[])
 int main()
 {
     FILE *archive;
-    char file_path[MAX]; // Arrey que armazena o nome do arquivo
+    char file_path[MAX]; // Array que armazena o nome do arquivo
     printf("Digite o caminho da pasta do arquivo: ");
     scanf("%s", file_path);
 
@@ -63,7 +73,7 @@ int main()
     }
     
     unsigned char byte; // Variavel que armazenara cada bit temporariamente
-    int frequency[256] = {0}; // Arrey que armazena a frequencia de cada byte
+    int frequency[256] = {0}; // Array que armazena a frequencia de cada byte
 
     // Le cada byte do arquivo
     while (fread(&byte, sizeof(unsigned char), 1, archive) == 1)
@@ -91,7 +101,7 @@ int main()
     struct Node* current = list_frequency;
     while (current != NULL)
     {
-        printf("[%c, %d] -> ", current->byte, current->frequency);
+        printf("[%c, %d] -> ", getByteFromVoidPointer(current->byte), current->frequency);
         current = current->next;
     }
     
