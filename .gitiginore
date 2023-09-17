@@ -1,0 +1,8 @@
+# Ignorar a pasta de compilação
+build/
+
+# Ignorar arquivos executáveis
+*.exe
+
+#Ignorar arquivos de objeto gerados durante a compilação
+*.o
