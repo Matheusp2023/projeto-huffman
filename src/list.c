@@ -58,6 +58,7 @@ void insertionFrequency(struct Node** list, int frequency[]) {
     }
 }
 
+// Exibir a lista encadeada
 void printList(struct Node* list) {
     struct Node* current = list;
     while (current != NULL)
@@ -67,6 +68,7 @@ void printList(struct Node* list) {
     }
 }
 
+// Liberar a memoria destruindo a lista encadeada
 void deleteList(struct Node* list) {
     struct Node* previour;
     while (list != NULL)
