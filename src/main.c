@@ -9,12 +9,12 @@ struct Node {
     struct Node* next;
 };
 
-void *create_void_pointer(unsigned char byte){
+void *createVoidPointer(unsigned char byte){
     unsigned char *pointer = malloc(sizeof(unsigned char*));
     *pointer = byte;
     return (void*) pointer;
 }
-unsigned char get_byte_from_void_pointer(struct Node *byte){
+unsigned char getByteFromVoidPointer(struct Node *byte){
     unsigned char *item = (unsigned char*) byte;
     return *item;
 }
