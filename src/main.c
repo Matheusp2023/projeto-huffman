@@ -28,7 +28,7 @@ void insertionFrequency(struct Node** list, int frequency[])
         {
             // Criar no
             struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-            newNode->byte = set_void_pointer(i);
+            newNode->byte = createVoidPointer(i);
             newNode->frequency = frequency[i];
             newNode->next = NULL;
 
