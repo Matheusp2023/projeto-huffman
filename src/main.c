@@ -41,14 +41,14 @@ unsigned char getByteFromVoidPointer(struct Node *byte){
     return *item;
 }
 void enqueue(struct Queue *queue,struct Node *newNode){
-    if (queue->head == NULL || newNode->frequency < queue->head->frequency){
+    if (queue->head == NULL || newNode->frequency <= queue->head->frequency){
         newNode->next = queue->head;
         queue->head = newNode;
     }
     // Aqui é para caso a inserção não ocorra no inicio
     else{
         struct Node* current = queue->head;
-        while (current->next != NULL && newNode->frequency >= current->next->frequency){
+        while (current->next != NULL && newNode->frequency > current->next->frequency){
             current = current->next;
         }
         newNode->next = current->next;
