@@ -101,7 +101,7 @@ int main()
     struct Node* current = list_frequency;
     while (current != NULL)
     {
-        printf("[%c, %d] -> ", get_byte_from_void_pointer(current->byte), current->frequency);
+        printf("[%c, %d] -> ", getByteFromVoidPointer(current->byte), current->frequency);
         current = current->next;
     }
     
