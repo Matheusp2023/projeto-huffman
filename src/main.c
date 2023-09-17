@@ -95,7 +95,7 @@ int main()
         current = current->next;
     }
     
-    //Liberar a memoria
+    // Liberar a memoria
     struct Node* previour;
     while (list_frequency != NULL)
     {
