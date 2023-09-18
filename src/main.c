@@ -14,12 +14,15 @@ struct Queue{
     int current_size;
     struct Node *head;
 };
+/* OBJETIVO: Criação de uma fila(uma ponteiro que vai apontar para o primeiro 
+        nó da lista ordenada e ter um tamanho que inicialmente é 0)*/ 
 struct Queue *createQueue(){
     struct Queue *New_queue = malloc(sizeof(struct Queue));
     New_queue->head = NULL;
     New_queue->current_size = 0;
     return New_queue;
 }
+// OBJETIVO: Criação de um nó de Huffman
 struct Node *createNode(void *byte,int frequency){
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->next = NULL;
@@ -29,17 +32,18 @@ struct Node *createNode(void *byte,int frequency){
     newNode->frequency = frequency;
     return newNode;
 }
-// Cria um ponteiro para void
+// OBJETIVO: Cria um ponteiro para void
 void *createVoidPointer(unsigned char byte){
     unsigned char *pointer = malloc(sizeof(unsigned char*));
     *pointer = byte;
     return (void*) pointer;
 }
-// Pega o conteudo de de um ponteiro para void
+// OBJETIVO: Pega o conteudo de de um ponteiro para void
 unsigned char getByteFromVoidPointer(struct Node *byte){
     unsigned char *item = (unsigned char*) byte;
     return *item;
 }
+// OBJETIVO: Função para adicionar um nó na fila de maneira ordenada com base na frequencia
 void enqueue(struct Queue *queue,struct Node *newNode){
     if (queue->head == NULL || newNode->frequency <= queue->head->frequency){
         newNode->next = queue->head;
@@ -68,7 +72,7 @@ void insertionFrequency(struct Queue *queue, int frequency[])
         }
     }
 }
-
+// * OBJETIVO: Imprimir a árvore de huffmann em pré_ordem
 void print_pre_order(struct Node *bt)
 {
     if (bt != NULL) {
@@ -77,6 +81,7 @@ void print_pre_order(struct Node *bt)
     print_pre_order(bt->right);
     }
 }
+// * OBJETIVO: Construir a árvore de huffman 
 void huffmanTree(struct Queue *queue){
     while(queue->current_size != 1){
         int frequency = queue->head->frequency + queue->head->next->frequency;
