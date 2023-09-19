@@ -94,12 +94,12 @@ void insertionFrequency(struct Queue *queue, int frequency[])
     }
 }
 // * OBJETIVO: Imprimir a árvore de huffmann em pré_ordem
-void print_pre_order(struct Node *bt)
+void printPreOrder(struct Node *bt)
 {
     if (bt != NULL) {
     printf("%c", getByteFromVoidPointer(bt->byte));
-    print_pre_order(bt->left);
-    print_pre_order(bt->right);
+    printPreOrder(bt->left);
+    printPreOrder(bt->right);
     }
 }
 // * OBJETIVO: Construir a árvore de huffman 
