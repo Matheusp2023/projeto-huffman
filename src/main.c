@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <list.h>
+#include <tree.h>
 
 #define MAX 100
 
@@ -45,6 +46,8 @@ int main() {
     
     // Fecha o arquivo
     fclose(archive);
+
+    printCSA();
 
     // Exibir a lista encadeada
     printf("\nLista encadeada ordenada das frequencias:\n");
