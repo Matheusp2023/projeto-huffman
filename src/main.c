@@ -7,6 +7,7 @@
 int main() {
     FILE *archive;
     char file_path[MAX]; // Array que armazena o nome do arquivo
+    int currentSize = 0;
     printf("Digite o caminho da pasta do arquivo: ");
     scanf("%s", file_path);
 
@@ -32,7 +33,7 @@ int main() {
     }
 
     // Inserir a frequencia de cada byte na lista encadeada ordenada
-    insertionFrequency(&list_frequency, frequency);
+    insertionFrequency(&list_frequency, frequency,&currentSize);
 
     // Exibir a tabela de frequência
     printf("Tabela de Frequencia:\n");
@@ -47,12 +48,13 @@ int main() {
     // Fecha o arquivo
     fclose(archive);
 
-    printCSA();
 
     // Exibir a lista encadeada
     printf("\nLista encadeada ordenada das frequencias:\n");
     printList(list_frequency);
     
+    huffmanTree(&list_frequency,&currentSize);
+    printPreOrder(list_frequency);
     // Liberar a memoria
     deleteList(list_frequency);
     
