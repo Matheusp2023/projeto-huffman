@@ -23,6 +23,7 @@ int main() {
     if (archive == NULL)
     {
         perror("Erro ao abrir o arquivo");
+        return 1;
     }
     
     unsigned char byte; // Variavel que armazenara cada bit temporariamente
@@ -58,10 +59,11 @@ int main() {
     huffmanTree(&list_frequency,&currentSize);
     printPreOrder(list_frequency);
     // Liberar a memoria
-    printf("tree deep: %d\n",treeDeep(list_frequency));
+    printf("\ntotal de nós: %d\n",treeSize(list_frequency));
     dictionary = createDictionary(treeDeep(list_frequency));
     generateDicionationary(dictionary,list_frequency,"",treeDeep(list_frequency));
     printDictionary(dictionary);
+    printf("%d",trashsize(dictionary,frequency));
     deleteList(list_frequency);
     return 0;
 }

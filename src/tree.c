@@ -38,3 +38,13 @@ int treeDeep(struct Node *huffTree){
         else return right;
     }
 }
+int treeSize(struct Node *huffTree){
+    if(huffTree == NULL){
+        return 0;
+    }
+    else{
+        int left = treeSize(huffTree->left);
+        int right = treeSize(huffTree->right);
+        return 1 + left + right;
+    }
+}

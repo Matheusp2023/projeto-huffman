@@ -12,5 +12,6 @@ void generateDicionationary(char **dictionary,struct Node *huffmanTree,char *pat
 
 void printDictionary(char **dictionary);
 
+int trashsize(char **dictionary,int frequency[]);
 
 #endif

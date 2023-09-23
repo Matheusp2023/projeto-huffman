@@ -14,4 +14,6 @@ int treeDeep(struct Node *huffTree);
 
 bool isLeaf(struct Node *node);
 
+int treeSize(struct Node *huffTree);
+
 #endif

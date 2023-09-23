@@ -25,6 +25,16 @@ void generateDicionationary(char **dictionary,struct Node *huffmanTree,char *pat
         generateDicionationary(dictionary,huffmanTree->right,right,nBits);
     }
 }
+int trashsize(char **dictionary,int frequency[]){
+    int totalBits = 0;
+    for(int i = 0;i < 256;i++){
+        if(strcmp(dictionary[i],"") == 0) continue;
+        totalBits += frequency[i] * strlen(dictionary[i]);
+    }
+    int trash = (8 - (totalBits % 8));
+    if(trash == 8) return 0;
+    return trash;
+}
 void printDictionary(char **dictionary){
     for(int i = 0;i < 256;i++){
         if(strcmp(dictionary[i],"") == 0) continue;
