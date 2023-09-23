@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <list.h>
 #include <tree.h>
+#include <encode.h>
 
 #define MAX 100
 
 int main() {
     FILE *archive;
     char file_path[MAX]; // Array que armazena o nome do arquivo
+    char **dictionary;
     int currentSize = 0;
     printf("Digite o caminho da pasta do arquivo: ");
     scanf("%s", file_path);
@@ -56,7 +58,10 @@ int main() {
     huffmanTree(&list_frequency,&currentSize);
     printPreOrder(list_frequency);
     // Liberar a memoria
+    printf("tree deep: %d\n",treeDeep(list_frequency));
+    dictionary = createDictionary(treeDeep(list_frequency));
+    generateDicionationary(dictionary,list_frequency,"",treeDeep(list_frequency));
+    printDictionary(dictionary);
     deleteList(list_frequency);
-    
     return 0;
 }
