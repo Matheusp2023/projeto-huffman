@@ -29,7 +29,7 @@ int main() {
     unsigned char byte; // Variavel que armazenara cada bit temporariamente
     int frequency[256] = {0}; // Array que armazena a frequencia de cada byte
 
-    // Le cada byte do arquivo
+    // Le cada byte do arquivo 
     while (fread(&byte, sizeof(unsigned char), 1, archive) == 1)
     {
         frequency[byte]++;
@@ -47,12 +47,6 @@ int main() {
             printf("Byte 0x%02X: %d vezes\n", i, frequency[i]);
         }
     }
-    
-    // Fecha o arquivo
-    fclose(archive);
-
-
-    // Exibir a lista encadeada
     printf("\nLista encadeada ordenada das frequencias:\n");
     printList(list_frequency);
     
@@ -64,6 +58,12 @@ int main() {
     generateDicionationary(dictionary,list_frequency,"",treeDeep(list_frequency));
     printDictionary(dictionary);
     printf("%d",trashsize(dictionary,frequency));
+    // Fecha o arquivo
+    fclose(archive);
+
     deleteList(list_frequency);
+
+    // Exibir a lista encadeada
+    
     return 0;
 }
