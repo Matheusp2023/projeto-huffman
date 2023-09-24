@@ -60,7 +60,7 @@ void insertionFrequency(struct Node** list, int frequency[],int *CurrentSize) {
         }
     }
 }
-unsigned char remove_first(struct Node **list, int *currentSize){
+unsigned char removeFirst(struct Node **list, int *currentSize){
     unsigned char item = getByteFromVoidPointer((*list)->byte); 
     (*list) = (*list)->next;
     (*currentSize)--;
