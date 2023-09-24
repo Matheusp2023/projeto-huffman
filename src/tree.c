@@ -20,9 +20,9 @@ void huffmanTree(struct Node **list,int *currentSize){
         int frequency = (*list)->frequency + (*list)->next->frequency;
         struct Node *newNode = createNode(createVoidPointer('*'),frequency);
         newNode->left = *list;
-        remove_first(list,currentSize);
+        removeFirst(list,currentSize);
         newNode->right = (*list);
-        remove_first(list,currentSize);
+        removeFirst(list,currentSize);
         addInOrder(list,newNode,currentSize);
     }
     return;
