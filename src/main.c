@@ -18,7 +18,12 @@ int main() {
 
     // Abre o arquivo para leitura
     archive = fopen(file_path, "rb");
-
+    FILE *archiveOut = fopen("compress.txt","wb");
+    if (archiveOut == NULL)
+    {
+        perror("Erro ao abrir o arquivo");
+        return 1;
+    }
     // Caso de erro na leitura do arquivo
     if (archive == NULL)
     {
@@ -57,12 +62,15 @@ int main() {
     dictionary = createDictionary(treeDeep(list_frequency));
     generateDicionationary(dictionary,list_frequency,"",treeDeep(list_frequency));
     printDictionary(dictionary);
-    printf("%d",trashsize(dictionary,frequency));
+    printf("%d\n",trashsize(dictionary,frequency));
     // Fecha o arquivo
-    fclose(archive);
-
+    setFirstByte(archiveOut,trashsize(dictionary,frequency),treeSize(list_frequency));
+    setSecondByte(archiveOut,treeSize(list_frequency));
+    setTree(archiveOut,list_frequency);
+    printBytes(archive,archiveOut,dictionary,treeDeep(list_frequency) + 1);
     deleteList(list_frequency);
-
+    fclose(archive);
+    fclose(archiveOut);
     // Exibir a lista encadeada
     
     return 0;

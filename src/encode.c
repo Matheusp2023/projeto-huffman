@@ -32,7 +32,6 @@ int trashsize(char **dictionary,int frequency[]){
         totalBits += frequency[i] * strlen(dictionary[i]);
     }
     int trash = (8 - (totalBits % 8));
-    if(trash == 8) return 0;
     return trash;
 }
 void printDictionary(char **dictionary){
@@ -41,3 +40,51 @@ void printDictionary(char **dictionary){
         printf("path:%c -> %s\n",i,dictionary[i]);
     }
 }
+void setFirstByte(FILE *file,int trashSize,int treeSize){
+    unsigned char byte_completo = 0x00;
+    byte_completo = byte_completo | (trashSize << 5);
+    byte_completo = byte_completo | (treeSize >> 8);
+    fwrite(&byte_completo,sizeof(unsigned char),1,file);
+}
+void setSecondByte(FILE *file,int treesize){
+    unsigned char byte_completo = 0x00;
+    byte_completo = byte_completo | treesize;
+    fwrite(&byte_completo,sizeof(unsigned char),1,file);
+}
+void setTree(FILE *file,struct Node *bt)
+{
+    if (bt != NULL) {
+    unsigned char x = getByteFromVoidPointer(bt->byte);
+    fwrite(&x,sizeof(unsigned char),1,file);
+    setTree(file,bt->left);
+    setTree(file,bt->right);
+    }
+}
+void printBytes(FILE *fileIn,FILE *fileOut,char **dictionary,int treeDeep){
+    fseek(fileIn, 0, SEEK_SET);
+    unsigned char byte;
+    unsigned char byte_completo = 0x00;
+    char caractere[treeDeep];
+    int move = 8;
+    int rest = 0;
+    memset(caractere,0,sizeof(caractere));
+    while (fread(&byte, sizeof(unsigned char), 1, fileIn) == 1)
+    {         
+        strcat(caractere,dictionary[byte]);    
+        move -= strlen(caractere);
+        if(move > 0) byte_completo = byte_completo | (1 << move);
+        else if(move == 0){
+            for (int bit = 7; bit >= 0; bit--) {    // Lê cada bit do byte
+            int valor_bit = (byte >> bit) & 1;
+            printf("%d", valor_bit);
+        }
+        }
+        else{
+            rest = -move;
+            byte_completo = byte_completo | (1 >> rest);
+            
+        }
+        }
+        memset(caractere,0,sizeof(caractere));
+}
+    
