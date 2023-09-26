@@ -14,4 +14,12 @@ void printDictionary(char **dictionary);
 // Achar o tamanho do lixo
 int trashsize(char **dictionary,int frequency[]);
 
+void setFirstByte(FILE *file,int trashSize,int treeSize);
+
+void setSecondByte(FILE *file,int treesize);
+
+void setTree(FILE *file,struct Node *bt);
+
+void printBytes(FILE *fileIn,FILE *fileOut,char **dictionary,int treeDeep);
+
 #endif
