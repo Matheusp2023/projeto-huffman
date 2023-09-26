@@ -3,6 +3,12 @@
 #include <tree.h>
 #include <encode.h>
 
+
+int is_bit_i_set(unsigned char c, int i)
+{
+unsigned char mask = 1 << i;
+return mask & c;
+}
 char **createDictionary(int nBits){
     char **dictionary;
     dictionary = malloc(sizeof(char*) * 256);
@@ -26,7 +32,7 @@ void generateDicionationary(char **dictionary,struct Node *huffmanTree,char *pat
     }
 }
 int trashsize(char **dictionary,int frequency[]){
-    int totalBits = 0;
+    long long int totalBits = 0;
     for(int i = 0;i < 256;i++){
         if(strcmp(dictionary[i],"") == 0) continue;
         totalBits += frequency[i] * strlen(dictionary[i]);
@@ -64,27 +70,65 @@ void printBytes(FILE *fileIn,FILE *fileOut,char **dictionary,int treeDeep){
     fseek(fileIn, 0, SEEK_SET);
     unsigned char byte;
     unsigned char byte_completo = 0x00;
-    char caractere[treeDeep];
-    int move = 8;
-    int rest = 0;
+    char caractere[30] = "";
+    char rest[30] = "";
+    int set = 8;
+    int c = 0;
+    int i,j = 0;
     memset(caractere,0,sizeof(caractere));
     while (fread(&byte, sizeof(unsigned char), 1, fileIn) == 1)
-    {         
-        strcat(caractere,dictionary[byte]);    
-        move -= strlen(caractere);
-        if(move > 0) byte_completo = byte_completo | (1 << move);
-        else if(move == 0){
-            for (int bit = 7; bit >= 0; bit--) {    // Lê cada bit do byte
-            int valor_bit = (byte >> bit) & 1;
-            printf("%d", valor_bit);
+    {      
+        //printf("check :%c\n",byte);   
+        strcat(caractere,rest);
+        memset(rest, '\0', sizeof(rest));
+        //if(byte == '!') printf("set: %d",set);
+        if(set > 0){
+            strcat(caractere,dictionary[byte]); 
+            set = 8 - strlen(caractere);
+        } 
+        if(set <= 0){
+            set = -set;
+            int k = 0;   
+            j = 0; 
+            while(j < set){
+                
+                rest[j] = caractere[8 + k];
+                j++;
+                k++;             
+            }         
+            for(i = 0;i <= 7;i++){
+            if(caractere[i] == '1'){
+                byte_completo = byte_completo | (1 << (7 - i));
+            } 
+            }
+            //printf("%d = %s\n",c,caractere);
+            //printf("%d = %s\n",c,rest);
+            //printf("%c %d\n",byte,set);
+            memset(caractere, '\0', sizeof(caractere));
+            fwrite(&byte_completo,sizeof(unsigned char),1,fileOut); 
+            byte_completo = 0x00;
+            set = 8;
+            c++;
+        }              
+    }
+    //printf("%s\n",caractere);
+    if(strlen(caractere)){
+        byte_completo = 0x00;
+        for(i = 0;i <= 7;i++){
+            if(caractere[i] == '1'){
+                byte_completo = byte_completo | (1 << (7 - i));
+            } 
         }
+        fwrite(&byte_completo,sizeof(unsigned char),1,fileOut);
+    }
+    if(strlen(rest)){
+        byte_completo = 0x00;
+        for(i = 0;i <= 7;i++){
+            if(rest[i] == '1'){
+                byte_completo = byte_completo | (1 << (7 - i));
+            } 
         }
-        else{
-            rest = -move;
-            byte_completo = byte_completo | (1 >> rest);
-            
-        }
-        }
-        memset(caractere,0,sizeof(caractere));
+        fwrite(&byte_completo,sizeof(unsigned char),1,fileOut);
+    }
 }
     
