@@ -18,7 +18,7 @@ void printPreOrder(struct Node *bt)
 void huffmanTree(struct Node **list,int *currentSize){
     while(*currentSize > 1){
         int frequency = (*list)->frequency + (*list)->next->frequency;
-        struct Node *newNode = createNode(createVoidPointer('*'),frequency);
+        struct Node newNode = createNode(createVoidPointer(''),frequency);
         newNode->left = *list;
         removeFirst(list,currentSize);
         newNode->right = (*list);
@@ -45,6 +45,10 @@ int treeSize(struct Node *huffTree){
     else{
         int left = treeSize(huffTree->left);
         int right = treeSize(huffTree->right);
+        unsigned char x = getByteFromVoidPointer(huffTree->byte);
+        if(((x == '*') || (x == '\\')) && isLeaf(huffTree)){
+        return 2 + left + right;
+    }
         return 1 + left + right;
     }
 }
