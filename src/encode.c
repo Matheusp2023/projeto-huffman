@@ -3,49 +3,58 @@
 #include <tree.h>
 #include <encode.h>
 
+unsigned long long int sizeArchive(FILE *arquivo) {
+    // Salva a posição atual do cursor no arquivo
+    unsigned long long int posicao_atual = ftell(arquivo);
 
-int is_bit_i_set(unsigned char c, int i)
-{
-unsigned char mask = 1 << i;
-return mask & c;
-}
-char **createDictionary(int nBits){
-    char **dictionary;
-    dictionary = malloc(sizeof(char*) * 256);
-    for(int i = 0; i < 256; i++){
-        dictionary[i] = calloc(nBits,sizeof(char));
+    // Vá até o final do arquivo
+    if (fseek(arquivo, 0, SEEK_END) != 0) {
+        perror("Erro ao buscar o final do arquivo");
+        return -1; // Retorno de erro
     }
-    return dictionary;
-}
-void generateDicionationary(char **dictionary,struct Node *huffmanTree,char *path,int nBits){
-    char left[nBits + 15],right[nBits + 15];
-    if(isLeaf(huffmanTree)){
-        strcpy(dictionary[getByteFromVoidPointer(huffmanTree->byte)],path);
+    // Obtenha a posição atual, que é o tamanho do arquivo
+    unsigned long long int tamanho = ftell(arquivo);
+
+    if (tamanho == -1) {
+        perror("Erro ao obter o tamanho do arquivo");
+        return -1; // Retorno de erro
     }
-    else{
-        strcpy(left,path);
-        strcpy(right,path);
-        strcat(left,"0");
-        strcat(right,"1");
-        generateDicionationary(dictionary,huffmanTree->left,left,nBits);
-        generateDicionationary(dictionary,huffmanTree->right,right,nBits);
+
+    // Volta para a posição original do cursor no arquivo
+    if (fseek(arquivo, posicao_atual, SEEK_SET) != 0) {
+        perror("Erro ao retornar para a posição original do arquivo");
+        return -1; // Retorno de erro
     }
+    return tamanho;
 }
-int trashsize(char **dictionary,int frequency[]){
-    long long int totalBits = 0;
+void buildTable(Node* tree_node,BitHuff table[],BitHuff code){         
+    if(isLeaf(tree_node))
+    {
+        table[getByteFromVoidPointer(tree_node->byte)] = code;
+        return;
+    }
+    else
+    {
+        code.size++;
+        code.bitH <<= 1;
+        if(tree_node->left != NULL)
+        buildTable(tree_node->left, table, code);
+        code.bitH++;
+        if(tree_node->right != NULL)
+        buildTable(tree_node->right, table, code);
+    }        
+}
+
+int trashsize(int frequency[],BitHuff table[]){
+    unsigned long long int totalBits = 0;
     for(int i = 0;i < 256;i++){
-        if(strcmp(dictionary[i],"") == 0) continue;
-        totalBits += frequency[i] * strlen(dictionary[i]);
+        if(frequency[i] == 0) continue;
+        totalBits += frequency[i] * table[i].size;
     }
     int trash = (8 - (totalBits % 8));
     return trash;
 }
-void printDictionary(char **dictionary){
-    for(int i = 0;i < 256;i++){
-        if(strcmp(dictionary[i],"") == 0) continue;
-        printf("path:%c -> %s\n",i,dictionary[i]);
-    }
-}
+
 void setFirstByte(FILE *file,int trashSize,int treeSize){
     unsigned char byte_completo = 0x00;
     byte_completo = byte_completo | (trashSize << 5);
@@ -70,58 +79,46 @@ void setTree(FILE *file,struct Node *bt)
     setTree(file,bt->right);
     }
 }
-void printBytes(FILE *fileIn,FILE *fileOut,char **dictionary,int treeDeep){
-    fseek(fileIn, 0, SEEK_SET);
-    unsigned char byte;
-    unsigned char byte_completo = 0x00;
-    char caractere[3000] = "";
-    char rest[3000] = "";
-    int set = 8;
-    int i,j = 0;
-    while (fread(&byte, sizeof(unsigned char), 1, fileIn) == 1)
+void setBytes(FILE *fileIn,FILE *fileOut,BitHuff table[],int trashSize){
+    short buffer_size = 0, caractere;
+    unsigned char buffer = 0; 
+    unsigned short int aux, code_tmp = 0;
+    while((caractere = getc(fileIn)) != EOF)
     {        
-        strcat(caractere,rest);
-        memset(rest, '\0', sizeof(rest));
-        if(set > 0){
-            strcat(caractere,dictionary[byte]); 
-            set = 8 - strlen(caractere);
-        } 
-        if(set <= 0){
-            set = -set;
-            int k = 0;   
-            j = 0; 
-            while(j < set){
-                
-                rest[j] = caractere[8 + j];
-                j++;          
-            }         
-            for(i = 0;i <= 7;i++){
-            if(caractere[i] == '1'){
-                byte_completo = byte_completo | (1 << (7 - i));
-            } 
-            }
-            memset(caractere, '\0', sizeof(caractere));
-            fwrite(&byte_completo,sizeof(unsigned char),1,fileOut); 
-            byte_completo = 0x00;
-            set = 8;
-        }              
-    }
-    if(strlen(caractere)){
-        byte_completo = 0x00;
-        for(i = 0;i <= 7;i++){
-            if(caractere[i] == '1'){
-                byte_completo = byte_completo | (1 << (7 - i));
-            } 
+        if((table[caractere].size + buffer_size) <= 8)
+        {
+            buffer <<= table[caractere].size;
+            buffer = buffer | table[caractere].bitH;
+            buffer_size += table[caractere].size;
+        }        
+        else 
+        {
+            aux = table[caractere].size;                         
+            buffer <<= (8 - buffer_size);
+            code_tmp = table[caractere].bitH >> (table[caractere].size - (8 - buffer_size));
+            aux -= (8 - buffer_size);            
+            buffer = buffer | code_tmp;            
+            fprintf(fileOut, "%c", buffer);
+            buffer = 0;
+            buffer_size = aux;                
+            code_tmp = table[caractere].bitH << (16 - buffer_size);
+            code_tmp >>= (16 - buffer_size);
+            buffer = code_tmp;                       
         }
-        fwrite(&byte_completo,sizeof(unsigned char),1,fileOut);
-    }
-    if(strlen(rest)){
-        byte_completo = 0x00;
-        for(i = 0;i <= 7;i++){
-            if(rest[i] == '1'){
-                byte_completo = byte_completo | (1 << (7 - i));
-            } 
+        
+        if(buffer_size == 8)
+        {            
+            fprintf(fileOut, "%c", buffer);
+            buffer = 0;
+            buffer_size = 0;
         }
-        fwrite(&byte_completo,sizeof(unsigned char),1,fileOut);
+    }    
+
+    if(buffer_size > 0 && buffer_size < 8)
+    {         
+        buffer <<= trashSize;        
+        fprintf(fileOut, "%c", buffer);
+        buffer = 0;
+        buffer_size = 0;
     }
 }

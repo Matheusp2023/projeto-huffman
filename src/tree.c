@@ -18,7 +18,7 @@ void printPreOrder(struct Node *bt)
 void huffmanTree(struct Node **list,int *currentSize){
     while(*currentSize > 1){
         int frequency = (*list)->frequency + (*list)->next->frequency;
-        struct Node newNode = createNode(createVoidPointer(''),frequency);
+        struct Node *newNode = createNode(createVoidPointer('*'),frequency);
         newNode->left = *list;
         removeFirst(list,currentSize);
         newNode->right = (*list);
