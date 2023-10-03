@@ -10,7 +10,7 @@ typedef struct bithuff{
     int bitH;
     int size;
 }BitHuff;
-
+// Pega o tamanho do arquivo
 unsigned long long int sizeArchive(FILE *archive);
 // Construir a tabelo dos bits de Huffman
 void buildTable(Node* tree_node,BitHuff table[],BitHuff code);
