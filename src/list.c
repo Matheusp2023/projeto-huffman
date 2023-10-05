@@ -21,6 +21,13 @@ bool isEmpty(struct Node** list) {
     return (*list == NULL);
 }
 
+void getFrequency(FILE *fileIn,int frequency[]){
+    unsigned char byte;
+    while (fread(&byte, sizeof(unsigned char), 1, fileIn) == 1)
+    {
+        frequency[byte]++;
+    }
+}
 void *createVoidPointer(unsigned char byte) {
     unsigned char *pointer = malloc(sizeof(unsigned char*));
     *pointer = byte;

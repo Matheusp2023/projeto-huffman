@@ -19,6 +19,7 @@ struct Node* createList();
 bool isEmpty(struct Node** list);
 // Criar um nó de huffman
 struct Node *createNode(void *byte,int frequency);
+void getFrequency(FILE *fileIn,int frequency[]);
 // Alocar memória para um ponteiro para void
 void *createVoidPointer(unsigned char byte);
 // Pegar o conteudo de um ponteiro pra void
