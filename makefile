@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Iinc
-SRC_FILES = src/main.c src/list.c src/tree.c src/encode.c
+SRC_FILES = src/main.c src/list.c src/tree.c src/encode.c src/decode.c
 BUILD_DIR = build
 
 TARGET = $(BUILD_DIR)/Szip.exe
