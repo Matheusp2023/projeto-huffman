@@ -2,6 +2,7 @@
 #include <list.h>
 #include <tree.h>
 #include <encode.h>
+#include <decode.h>
 
 #define MAX 100
 
@@ -65,7 +66,24 @@ int main() {
         }
     }
     else if(i == 2){
-        printf("EM DESENVOLVIMENTO\n");
+        FILE *archive;
+        FILE *archiveOut;
+        char file_path[MAX];
+        printf("Digite o caminho da pasta do arquivo: ");
+        scanf("%s", file_path);
+        archive = fopen(file_path, "rb");
+        char *remove = strrchr(file_path,'.');
+        if(remove != NULL) *remove = '\0';
+        archiveOut = fopen(file_path, "wb");
+        short int trash = trashSizeCompactFile(archive);
+        short int treeSize = treeSizeCompactFile(archive);
+        unsigned long long int archiveSize = sizeArchive(archive);
+        archiveSize -= 2;
+        archiveSize -= treeSize;
+        Node *huffTree = getTree(archive,&treeSize);
+        setBytesBack(archive,archiveOut,trash,archiveSize,huffTree);
+        fclose(archive);
+        fclose(archiveOut);
     }
     
     return 0;
