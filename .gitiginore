@@ -1,5 +1,5 @@
 # Ignorar a pasta de compilação
-build/
+*build/
 
 # Ignorar arquivos executáveis
 *.exe
