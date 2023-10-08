@@ -73,24 +73,3 @@ unsigned char removeFirst(struct Node **list, int *currentSize){
     (*currentSize)--;
     return item;
 }
-
-// Exibir a lista encadeada
-void printList(struct Node* list) {
-    struct Node* current = list;
-    while (current != NULL)
-    {
-        printf("[%c, %d] -> ", getByteFromVoidPointer(current->byte), current->frequency);
-        current = current->next;
-    }
-}
-
-// Liberar a memoria destruindo a lista encadeada
-void deleteList(struct Node* list) {
-    struct Node* previour;
-    while (list != NULL)
-    {
-        previour = list;
-        list = list->next;
-        free(previour);
-    }
-}
