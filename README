@@ -1,5 +1,7 @@
-# Projeto de Criptografia RSA | Matematica Discreta
-Projeto da disciplina de Matemática Discreta sobre criptografia RSA. 2º semestre(2022.2) do curso de Engenharia da Computação e Ciência da Computação na UFAL: Universidade Federal de Alagoas.
+# Projeto Huffman | Estrutura de Dados
+
+Projeto da disciplina de Estrutura de Dados sobre o algoritmo de Huffman. 1º semestre(2023.1) do curso de Engenharia da Computação na UFAL: Universidade Federal de Alagoas.
+
 <p align="center">
   <img src="https://user-images.githubusercontent.com/91018438/204195385-acc6fcd4-05a7-4f25-87d1-cb7d5cc5c852.png" alt="animated" />
 </p>
@@ -8,71 +10,38 @@ Projeto da disciplina de Matemática Discreta sobre criptografia RSA. 2º semest
 Integrantes:
 
   
-    Matheus Pedro | Sandro Gomes | Leonardo Lucca | João Victor | Robson de Paula
+    Matheus Pedro | Emily Vitória | Pablo Munih | Robson de Paula
  </center>
-  
-  
 
-## O que é a criptografia RSA?
-* A criptografia RSA consiste em uma forma de criptografar números com base na artimética modular.
-* É bastante usada no ramo computacional na finalidade de obter serviços mais seguros.
-* Possui como alicerce a aritmética modular, onde se explora a dificuldade de fatorar numeros compostos muito grandes em um produto de numeros primos, constituindo assim, um sistema de criptografia eficaz.
-
-## Como funciona a criptografia RSA
-* Inserção de dois números primos, p e q, e um número e coprimo com (p-1)(q-1), constituindo assim a chave pública.
-* Para criptografar, basta encontrar o módulo do número atribuido a cada letra do alfabeto elevado ao expoente e com o produto de p e q.
-* Pra descriptografar, basta encontrar o resto do número crifado elevado ao expoente d com o produto de p e q, sendo esse d o inverso modular do e módulo (p-1)*(q-1).
-
-```c
-criptografia: mensagem^e = numero mod (p*q)
-
-descriptografia: numero^d = mensagem mod (p*q)
-
-```		
-<h2>Linguagem usada no projeto</h2>
-<a href="https://www.cprogramming.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg" alt="c" width="40" height="40"/> </a> </p>
+## O que é o Algoritmo de Huffman?
+A codificação de Huffman é um método de compressão que usa as probabilidades de ocorrência dos símbolos no conjunto de dados a ser comprimido para determinar códigos de tamanho variável para cada símbolo.
 
 ## Instalação do programa
 
-<p> Para poder instalar e executar o programa, você terá que ter instalado o GCC em sua máquina
+<p>
 
-> Exemplo:
->
 > Clone esse projeto em seu computador com o comando:
 > ```
-> 	git clone https://github.com/Matheusp2023/Projeto_MD_Criptografia_RSA
+> 	git clone https://github.com/Matheusp2023/projeto-huffman
 > ```
 > Acesse a pasta do projeto seu terminal:
 > ```
 > 	cd [Nome da pasta onde você salvou]
 > ```
-> Já pasta da aplicação em seu terminal, digite o seguinte comando:
+> Já na pasta da aplicação em seu terminal, digite o seguinte comando:
 > ```
-> 	gcc rsa.c -o main
+> 	make
 > ```
 > 	Logo depois, basta executar com o seguinte comando:
 > ```
->         ./main
+>         ./build/Szip.exe
   </p>
 
 
 ## Execução do programa
-<p> Ao inicializar o programa, você terá direito de escolha de 5 opções:
+<p> Ao inicializar o programa, você terá direito de escolha de 2 opções:
   
-* Criar chaves públicas e armazená-las em um arquivo .txt
-* Criptografar uma frase de até 1000 caracteres digitada pelo usuário e gerar um arquivo criptado em .txt
-* Descriptografar o arquivo com a inserção de chaves públicas a critério do usuário
-* Ver a mensagem desciptografada, ou não, conforme o item 3
-* Sair do programa
-  <p align="center">
-  <img src="https://github.com/Matheusp2023/Projeto_MD_Criptografia_RSA/blob/main/Imagem%20do%20Menu.jpg" alt="animated" />
-</p>
-
-### Arrays para números e letras de acordo com a numeração dada
-
-```c
-char letras[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ' '};
-int numero_no_alfabeto[] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28};
-```
+* Compactar um arquivo
+* Descompactar o arquivo
 
 # Obrigado pela atenção!
